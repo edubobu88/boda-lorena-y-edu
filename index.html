@@ -246,7 +246,14 @@
       font-weight: 400; line-height: 1;
       color: var(--cream); margin-bottom: .4rem;
     }
-    .h-names em { font-style: italic; color: var(--gold-light); }
+    .h-names em {
+      font-style: normal;
+      font-family: 'Dancing Script', cursive;
+      font-size: .72em;
+      color: var(--gold-light);
+      font-weight: 600;
+      vertical-align: middle;
+    }
 
     .h-date {
       font-family: 'Dancing Script', cursive;
@@ -580,7 +587,7 @@
 ════════════════════════════════════════════ -->
 <div id="pin-overlay">
   <div style="text-align:center">
-    <p class="pin-names">Lorena y Eduardo</p>
+    <p class="pin-names">Lorena <span style="font-size:.72em;color:var(--gold-light)">&#38;</span> Eduardo</p>
     <p class="pin-subtitle">Introduce el código de acceso</p>
     <p class="pin-hint">Os lo compartimos en la invitación 💛</p>
   </div>
@@ -613,7 +620,7 @@
      SETUP OVERLAY
 ════════════════════════════════════════════ -->
 <div id="setup">
-  <div class="setup-title">Lorena y Eduardo</div>
+  <div class="setup-title">Lorena <span style="font-size:.72em;color:var(--gold-light)">&#38;</span> Eduardo</div>
   <div class="setup-box">
     <h2>Conectar con Supabase</h2>
     <p>
@@ -665,7 +672,7 @@ CREATE POLICY "subir_todos"  ON memorias FOR INSERT WITH CHECK (true);
   <!-- CABECERA -->
   <header>
     <p class="h-eyebrow">14 de noviembre de 2026 · Sevilla</p>
-    <h1 class="h-names">Lorena <em>y</em> Eduardo</h1>
+    <h1 class="h-names">Lorena <em>&amp;</em> Eduardo</h1>
     <p class="h-date">Comparte tu recuerdo con nosotros</p>
     <div class="h-divider"></div>
     <p class="h-sub">Sube fotos y videos · Se guardan para siempre</p>
