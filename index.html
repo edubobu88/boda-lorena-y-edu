@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lorena & Eduardo — Memorias</title>
+  <title>Edu & Lorena — Memorias</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -33,6 +33,92 @@
         radial-gradient(ellipse 60% 40% at 15% 10%, rgba(196,164,74,.07) 0%, transparent 60%),
         radial-gradient(ellipse 50% 35% at 85% 90%, rgba(196,138,139,.06) 0%, transparent 60%);
     }
+
+    /* ── PIN OVERLAY ───────────────────────────────────── */
+    #pin-overlay {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 1.5rem; gap: 1.75rem;
+    }
+    #pin-overlay.oculto { display: none; }
+
+    .pin-names {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.6rem; color: var(--gold);
+      text-align: center; line-height: 1;
+    }
+
+    .pin-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: .95rem; color: var(--cream);
+      opacity: .55; text-align: center;
+      margin-top: .4rem;
+    }
+
+    .pin-hint {
+      font-size: .72rem; color: var(--muted);
+      text-align: center; margin-top: .3rem;
+      letter-spacing: .03em;
+    }
+
+    .pin-dots {
+      display: flex; gap: .85rem;
+    }
+
+    .pin-dot {
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(196,164,74,.4);
+      transition: all .2s;
+    }
+
+    .pin-dot.filled {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(196,164,74,.5);
+    }
+
+    .pin-error {
+      font-size: .78rem; color: var(--rose);
+      text-align: center; min-height: 1rem;
+      letter-spacing: .02em;
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .55rem;
+      width: 252px;
+    }
+
+    .numpad-btn {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.25rem; font-weight: 300;
+      padding: 1.05rem;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      text-align: center;
+    }
+    .numpad-btn:hover  { background: rgba(255,255,255,.1); }
+    .numpad-btn:active { transform: scale(.94); background: rgba(196,164,74,.15); }
+    .numpad-btn.del    { font-size: .95rem; color: var(--muted); }
+    .numpad-btn.vacio  { pointer-events: none; background: transparent; border: none; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-9px); }
+      40%     { transform: translateX(9px); }
+      60%     { transform: translateX(-6px); }
+      80%     { transform: translateX(4px); }
+    }
+    .pin-shake { animation: shake .38s ease; }
 
     /* ── SETUP OVERLAY ─────────────────────────────────── */
     #setup {
@@ -490,10 +576,44 @@
 <body>
 
 <!-- ════════════════════════════════════════════
+     PIN OVERLAY
+════════════════════════════════════════════ -->
+<div id="pin-overlay">
+  <div style="text-align:center">
+    <p class="pin-names">Edu & Lorena</p>
+    <p class="pin-subtitle">Introduce el código de acceso</p>
+    <p class="pin-hint">Os lo compartimos en la invitación 💛</p>
+  </div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+  </div>
+  <p class="pin-error" id="pin-error"></p>
+  <div class="numpad">
+    <button class="numpad-btn" onclick="pinDigit('1')">1</button>
+    <button class="numpad-btn" onclick="pinDigit('2')">2</button>
+    <button class="numpad-btn" onclick="pinDigit('3')">3</button>
+    <button class="numpad-btn" onclick="pinDigit('4')">4</button>
+    <button class="numpad-btn" onclick="pinDigit('5')">5</button>
+    <button class="numpad-btn" onclick="pinDigit('6')">6</button>
+    <button class="numpad-btn" onclick="pinDigit('7')">7</button>
+    <button class="numpad-btn" onclick="pinDigit('8')">8</button>
+    <button class="numpad-btn" onclick="pinDigit('9')">9</button>
+    <div class="numpad-btn vacio"></div>
+    <button class="numpad-btn" onclick="pinDigit('0')">0</button>
+    <button class="numpad-btn del" onclick="pinBorrar()">⌫</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
      SETUP OVERLAY
 ════════════════════════════════════════════ -->
 <div id="setup">
-  <div class="setup-title">Lorena & Eduardo</div>
+  <div class="setup-title">Edu & Lorena</div>
   <div class="setup-box">
     <h2>Conectar con Supabase</h2>
     <p>
@@ -545,7 +665,7 @@ CREATE POLICY "subir_todos"  ON memorias FOR INSERT WITH CHECK (true);
   <!-- CABECERA -->
   <header>
     <p class="h-eyebrow">14 de noviembre de 2026 · Sevilla</p>
-    <h1 class="h-names">Lorena <em>&</em> Eduardo</h1>
+    <h1 class="h-names">Edu <em>&</em> Lorena</h1>
     <p class="h-date">Comparte tu recuerdo con nosotros</p>
     <div class="h-divider"></div>
     <p class="h-sub">Sube fotos y videos · Se guardan para siempre</p>
@@ -617,9 +737,47 @@ CREATE POLICY "subir_todos"  ON memorias FOR INSERT WITH CHECK (true);
 ════════════════════════════════════════════ -->
 <script>
 const BUCKET = 'boda-memories';
+const PIN_CORRECTO = '141126';
 let sb = null;
 let memorias = [];
 let archivoSeleccionado = null;
+let pinIntroducido = '';
+
+// ─── PIN ────────────────────────────────────────────────────
+function pinDigit(d) {
+  if (pinIntroducido.length >= 6) return;
+  pinIntroducido += d;
+  actualizarDots();
+  if (pinIntroducido.length === 6) setTimeout(verificarPin, 150);
+}
+
+function pinBorrar() {
+  pinIntroducido = pinIntroducido.slice(0, -1);
+  document.getElementById('pin-error').textContent = '';
+  actualizarDots();
+}
+
+function actualizarDots() {
+  document.querySelectorAll('.pin-dot').forEach((dot, i) => {
+    dot.classList.toggle('filled', i < pinIntroducido.length);
+  });
+}
+
+function verificarPin() {
+  if (pinIntroducido === PIN_CORRECTO) {
+    localStorage.setItem('pin_ok', '1');
+    document.getElementById('pin-overlay').classList.add('oculto');
+  } else {
+    const dotsEl = document.getElementById('pin-dots');
+    dotsEl.classList.add('pin-shake');
+    document.getElementById('pin-error').textContent = 'Código incorrecto';
+    setTimeout(() => {
+      dotsEl.classList.remove('pin-shake');
+      pinIntroducido = '';
+      actualizarDots();
+    }, 500);
+  }
+}
 
 // ─── CONFIGURACIÓN ──────────────────────────────────────────
 function guardarConfig() {
@@ -645,13 +803,18 @@ function abrirSetup() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const url = localStorage.getItem('sb_url');
-  const key = localStorage.getItem('sb_key');
-  if (url && key) {
-    document.getElementById('cfg-url').value = url;
-    document.getElementById('cfg-key').value = key;
-    arrancar(url, key);
+  // PIN check first
+  if (localStorage.getItem('pin_ok') === '1') {
+    document.getElementById('pin-overlay').classList.add('oculto');
+    const url = localStorage.getItem('sb_url');
+    const key = localStorage.getItem('sb_key');
+    if (url && key) {
+      document.getElementById('cfg-url').value = url;
+      document.getElementById('cfg-key').value = key;
+      arrancar(url, key);
+    }
   }
+  // Si pin_ok no está, el overlay de PIN ya es visible por defecto
   initDropZone();
 });
 
