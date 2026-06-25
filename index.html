@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edu & Lorena — Memorias</title>
+  <title>Lorena y Eduardo — Memorias</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -580,7 +580,7 @@
 ════════════════════════════════════════════ -->
 <div id="pin-overlay">
   <div style="text-align:center">
-    <p class="pin-names">Edu & Lorena</p>
+    <p class="pin-names">Lorena y Eduardo</p>
     <p class="pin-subtitle">Introduce el código de acceso</p>
     <p class="pin-hint">Os lo compartimos en la invitación 💛</p>
   </div>
@@ -613,7 +613,7 @@
      SETUP OVERLAY
 ════════════════════════════════════════════ -->
 <div id="setup">
-  <div class="setup-title">Edu & Lorena</div>
+  <div class="setup-title">Lorena y Eduardo</div>
   <div class="setup-box">
     <h2>Conectar con Supabase</h2>
     <p>
@@ -665,7 +665,7 @@ CREATE POLICY "subir_todos"  ON memorias FOR INSERT WITH CHECK (true);
   <!-- CABECERA -->
   <header>
     <p class="h-eyebrow">14 de noviembre de 2026 · Sevilla</p>
-    <h1 class="h-names">Edu <em>&</em> Lorena</h1>
+    <h1 class="h-names">Lorena <em>y</em> Eduardo</h1>
     <p class="h-date">Comparte tu recuerdo con nosotros</p>
     <div class="h-divider"></div>
     <p class="h-sub">Sube fotos y videos · Se guardan para siempre</p>
@@ -737,6 +737,8 @@ CREATE POLICY "subir_todos"  ON memorias FOR INSERT WITH CHECK (true);
 ════════════════════════════════════════════ -->
 <script>
 const BUCKET = 'boda-memories';
+const SUPABASE_URL = 'https://mhtoptrciayzjssfrvxe.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1odG9wdHJjaWF5empzc2ZydnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY1MTQsImV4cCI6MjA5NzkwMjUxNH0.ryNPZIVMt9cJZeszHduVafHLOpxiJCf6P4biqKgWFjs';
 const PIN_CORRECTO = '141126';
 let sb = null;
 let memorias = [];
@@ -767,6 +769,7 @@ function verificarPin() {
   if (pinIntroducido === PIN_CORRECTO) {
     localStorage.setItem('pin_ok', '1');
     document.getElementById('pin-overlay').classList.add('oculto');
+    arrancar(SUPABASE_URL, SUPABASE_KEY);
   } else {
     const dotsEl = document.getElementById('pin-dots');
     dotsEl.classList.add('pin-shake');
@@ -799,22 +802,14 @@ function arrancar(url, key) {
 }
 
 function abrirSetup() {
-  document.getElementById('setup').classList.remove('oculto');
+  // Credenciales hardcodeadas — no se necesita overlay de configuración
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  // PIN check first
   if (localStorage.getItem('pin_ok') === '1') {
     document.getElementById('pin-overlay').classList.add('oculto');
-    const url = localStorage.getItem('sb_url');
-    const key = localStorage.getItem('sb_key');
-    if (url && key) {
-      document.getElementById('cfg-url').value = url;
-      document.getElementById('cfg-key').value = key;
-      arrancar(url, key);
-    }
+    arrancar(SUPABASE_URL, SUPABASE_KEY);
   }
-  // Si pin_ok no está, el overlay de PIN ya es visible por defecto
   initDropZone();
 });
 
