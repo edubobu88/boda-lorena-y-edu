@@ -774,7 +774,6 @@ function actualizarDots() {
 
 function verificarPin() {
   if (pinIntroducido === PIN_CORRECTO) {
-    localStorage.setItem('pin_ok', '1');
     document.getElementById('pin-overlay').classList.add('oculto');
     arrancar(SUPABASE_URL, SUPABASE_KEY);
   } else {
@@ -813,10 +812,6 @@ function abrirSetup() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('pin_ok') === '1') {
-    document.getElementById('pin-overlay').classList.add('oculto');
-    arrancar(SUPABASE_URL, SUPABASE_KEY);
-  }
   initDropZone();
 });
 
